@@ -1,0 +1,1 @@
+TravelLog is a 100% client-side Progressive Web App (PWA) designed for volunteers and freelancers to log trips, track tolls and fuel, and generate monthly reimbursement reports. Built with zero central backend, it ensures complete privacy by saving data locally and syncing exclusively to the user's personal Google Drive.
