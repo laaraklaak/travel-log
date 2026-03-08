@@ -45,6 +45,23 @@
                 </button>
             </div>
 
+            <!-- Cloud Sync Warning Banner -->
+            <div id="sync-warning-banner" class="hidden bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between shadow-sm">
+                <div class="flex gap-3 items-start">
+                    <div class="text-indigo-600 mt-0.5">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-indigo-900">Data not backed up</p>
+                        <p class="text-xs text-indigo-700/80 mt-0.5 font-medium leading-relaxed">Your trips are only saved to this device. Connect Google Drive to prevent data loss.</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto mt-1 sm:mt-0">
+                    <button onclick="dismissSyncBanner()" class="px-3 py-2 text-xs font-bold text-indigo-600/70 hover:bg-indigo-100 rounded-lg transition-colors">Dismiss</button>
+                    <button onclick="switchTab('settings')" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-indigo-700 transition-colors text-center">Connect Now</button>
+                </div>
+            </div>
+
             <!-- Metric Cards -->
             <div class="grid grid-cols-1 gap-4">
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 flex justify-between items-center hover:shadow-md transition-shadow">
@@ -78,11 +95,19 @@
                 </div>
             </div>
 
+            <!-- Current Month Trip List -->
+            <div class="mt-8">
+                <h3 class="text-sm font-extrabold tracking-widest text-indigo-400/80 uppercase mb-4">This Month's Trips</h3>
+                <div id="current-month-trips" class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                    <!-- Dynamic Current Month Trips Go Here -->
+                </div>
+            </div>
+
             <!-- Past Months Archive -->
             <div class="mt-8">
                 <h3 class="text-sm font-extrabold tracking-widest text-indigo-400/80 uppercase mb-4">Past Months Archive</h3>
                 <div id="archive-container" class="space-y-3">
-                    <!-- Dynamic Content -->
+                    <!-- Dynamic Archive Content -->
                 </div>
             </div>
         </div>
@@ -105,6 +130,10 @@
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-1.5">Destination</label>
                     <input type="text" id="input-dest" required placeholder="e.g. Downtown Clinic" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all font-medium">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Reason for Visit</label>
+                    <input type="text" id="input-reason" required placeholder="e.g. Patient Consultation" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all font-medium">
                 </div>
                 
                 <div class="flex items-center gap-3 bg-slate-50 px-4 py-3 border border-slate-200 rounded-xl">
@@ -300,6 +329,9 @@
                         showToast('Connected to Google Drive');
                         // Run initial sync check
                         syncWithDrive();
+                        
+                        // Hide sync banner if visible
+                        document.getElementById('sync-warning-banner').classList.add('hidden');
                     }
                 },
             });
@@ -336,6 +368,7 @@
         // Fetch inputs
         const date = document.getElementById('input-date').value;
         let dest = document.getElementById('input-dest').value.trim();
+        let reason = document.getElementById('input-reason').value.trim();
         let km = parseFloat(document.getElementById('input-km').value);
         let toll = parseFloat(document.getElementById('input-toll').value);
         let fuel = parseFloat(document.getElementById('input-fuel').value);
@@ -365,7 +398,7 @@
             if (returnToll < 0 || returnFuel < 0) valid = false;
         }
 
-        if (!valid || !date || !dest) return;
+        if (!valid || !date || !dest || !reason) return;
 
         // Apply Round Trip Logic
         if (isRoundTrip) {
@@ -380,6 +413,7 @@
             id: Date.now().toString(),
             date,
             dest,
+            reason,
             km,
             toll,
             fuel,
@@ -417,11 +451,14 @@
         const now = new Date();
         const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        document.getElementById('current-month-title').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const fullMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        document.getElementById('current-month-title').innerText = `${fullMonthNames[now.getMonth()]} ${now.getFullYear()}`;
 
         let curKm = 0, curToll = 0, curFuel = 0;
         let archiveGroups = {};
+        let currentMonthTrips = [];
 
         trips.forEach(t => {
             const tripMonthKey = t.date.substring(0, 7); // "YYYY-MM"
@@ -429,6 +466,7 @@
                 curKm += t.km;
                 curToll += t.toll;
                 curFuel += t.fuel;
+                currentMonthTrips.push(t); // Add to current month list
             } else {
                 if (!archiveGroups[tripMonthKey]) {
                     archiveGroups[tripMonthKey] = { km: 0, toll: 0, fuel: 0, count: 0 };
@@ -440,10 +478,54 @@
             }
         });
 
-        // Update Current Month DOM
+        // Update Current Month Totals DOM
         document.getElementById('dash-km').innerText = curKm.toFixed(1);
         document.getElementById('dash-toll').innerText = curToll.toFixed(2);
         document.getElementById('dash-fuel').innerText = curFuel.toFixed(2);
+
+        // Render Current Month Trips List
+        const currentTripsContainer = document.getElementById('current-month-trips');
+        currentTripsContainer.innerHTML = '';
+
+        if (currentMonthTrips.length === 0) {
+            currentTripsContainer.innerHTML = `
+                <div class="p-8 text-center bg-white/50">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-300">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                    <p class="text-sm font-bold text-slate-400">No trips logged yet this month.</p>
+                </div>`;
+        } else {
+            currentMonthTrips.forEach(t => {
+                const [y, m, d] = t.date.split('-');
+                const displayDate = `${monthNames[parseInt(m)-1]} ${d}`;
+                
+                let receiptBtn = t.receipts && t.receipts.length > 0 
+                    ? `<button onclick="openReceiptModal('${t.id}')" class="flex-shrink-0 text-indigo-600 text-xs font-bold bg-indigo-50 px-2.5 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1.5 border border-indigo-100/50"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> ${t.receipts.length}</button>` 
+                    : '';
+
+                const item = document.createElement('div');
+                item.className = "p-5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors";
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="pr-3">
+                            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">${displayDate}</p>
+                            <p class="text-sm font-extrabold text-slate-700 leading-tight">${t.dest}</p>
+                            <p class="text-xs font-medium text-slate-500 italic mt-0.5">${t.reason}</p>
+                        </div>
+                        ${receiptBtn}
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs font-extrabold text-slate-500 bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                        <span class="text-blue-600">${t.km.toFixed(1)} km</span>
+                        <span class="text-slate-300 px-1">•</span>
+                        <span class="text-purple-600">$${t.toll.toFixed(2)} toll</span>
+                        <span class="text-slate-300 px-1">•</span>
+                        <span class="text-rose-600">$${t.fuel.toFixed(2)} fuel</span>
+                    </div>
+                `;
+                currentTripsContainer.appendChild(item);
+            });
+        }
 
         // Render Archive Accordion
         const archiveContainer = document.getElementById('archive-container');
@@ -453,45 +535,51 @@
         
         if (sortedArchiveKeys.length === 0) {
             archiveContainer.innerHTML = '<p class="text-sm text-slate-400 italic font-medium">No past data found.</p>';
-            return;
-        }
+        } else {
+            sortedArchiveKeys.forEach(key => {
+                const data = archiveGroups[key];
+                const [year, month] = key.split('-');
+                const displayMonth = `${fullMonthNames[parseInt(month)-1]} ${year}`;
+                
+                const monthTrips = trips.filter(t => t.date.substring(0, 7) === key);
+                let tripDetailsHtml = monthTrips.map(t => {
+                    let receiptBtn = t.receipts && t.receipts.length > 0 
+                        ? `<button onclick="openReceiptModal('${t.id}')" class="text-indigo-600 text-xs font-bold bg-indigo-50 px-2.5 py-1 rounded-md hover:bg-indigo-100 transition-colors flex items-center gap-1"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> ${t.receipts.length}</button>` 
+                        : '';
+                    return `<div class="text-xs border-b border-slate-100 py-3 flex justify-between items-start last:border-0">
+                        <div class="flex flex-col pr-2">
+                            <span class="font-bold text-slate-700 text-sm mb-0.5">${t.date.split('-')[2]}</span>
+                            <span class="text-slate-800 font-bold">${t.dest}</span>
+                            <span class="text-slate-500 italic mt-0.5 font-medium">${t.reason || 'No reason provided'}</span>
+                        </div>
+                        ${receiptBtn}
+                    </div>`;
+                }).join('');
 
-        sortedArchiveKeys.forEach(key => {
-            const data = archiveGroups[key];
-            const [year, month] = key.split('-');
-            const displayMonth = `${monthNames[parseInt(month)-1]} ${year}`;
-            
-            const currentMonthTrips = trips.filter(t => t.date.substring(0, 7) === key);
-            let tripDetailsHtml = currentMonthTrips.map(t => {
-                let receiptBtn = t.receipts && t.receipts.length > 0 
-                    ? `<button onclick="openReceiptModal('${t.id}')" class="text-indigo-600 text-xs font-bold bg-indigo-50 px-2.5 py-1 rounded-md hover:bg-indigo-100 transition-colors flex items-center gap-1"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> ${t.receipts.length}</button>` 
-                    : '';
-                return `<div class="text-xs border-b border-slate-100 py-3 flex justify-between items-center last:border-0">
-                    <div class="flex flex-col"><span class="font-bold text-slate-700 text-sm mb-0.5">${t.date.split('-')[2]}</span><span class="text-slate-500">${t.dest}</span></div>
-                    ${receiptBtn}
-                </div>`;
-            }).join('');
-
-            const card = document.createElement('div');
-            card.className = "bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-all";
-            card.innerHTML = `
-                <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full px-5 py-4 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white hover:from-indigo-50/50 transition-colors">
-                    <span class="font-extrabold text-slate-700">${displayMonth}</span>
-                    <span class="text-xs font-bold bg-indigo-100 px-3 py-1.5 rounded-lg text-indigo-700">${data.count} trips</span>
-                </button>
-                <div class="hidden px-5 py-5 space-y-3 border-t border-slate-100 bg-slate-50/30">
-                    <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Kilometers</span><span class="font-black text-blue-700 text-base">${data.km.toFixed(1)} km</span></div>
-                    <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Tolls</span><span class="font-black text-purple-700 text-base">$${data.toll.toFixed(2)}</span></div>
-                    <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Fuel</span><span class="font-black text-rose-700 text-base">$${data.fuel.toFixed(2)}</span></div>
-                    
-                    <div class="mt-4 pt-3 border-t border-slate-200/60">
-                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Itemized Trips</p>
-                        ${tripDetailsHtml}
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-all";
+                card.innerHTML = `
+                    <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full px-5 py-4 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white hover:from-indigo-50/50 transition-colors">
+                        <span class="font-extrabold text-slate-700">${displayMonth}</span>
+                        <span class="text-xs font-bold bg-indigo-100 px-3 py-1.5 rounded-lg text-indigo-700">${data.count} trips</span>
+                    </button>
+                    <div class="hidden px-5 py-5 space-y-3 border-t border-slate-100 bg-slate-50/30">
+                        <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Kilometers</span><span class="font-black text-blue-700 text-base">${data.km.toFixed(1)} km</span></div>
+                        <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Tolls</span><span class="font-black text-purple-700 text-base">$${data.toll.toFixed(2)}</span></div>
+                        <div class="flex justify-between items-center text-sm"><span class="text-slate-500 font-bold uppercase tracking-wide text-xs">Fuel</span><span class="font-black text-rose-700 text-base">$${data.fuel.toFixed(2)}</span></div>
+                        
+                        <div class="mt-4 pt-3 border-t border-slate-200/60">
+                            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Itemized Trips</p>
+                            ${tripDetailsHtml}
+                        </div>
                     </div>
-                </div>
-            `;
-            archiveContainer.appendChild(card);
-        });
+                `;
+                archiveContainer.appendChild(card);
+            });
+        }
+        
+        // Check if we need to show the cloud backup warning banner
+        checkSyncBanner();
     }
 
     // --- 5. EMAIL GENERATION ---
@@ -511,7 +599,8 @@
         let totalKm = 0, totalToll = 0, totalFuel = 0;
         let itemized = currentTrips.map(t => {
             totalKm += t.km; totalToll += t.toll; totalFuel += t.fuel;
-            return `${t.date} | ${t.dest} | ${t.km}km | Toll: $${t.toll.toFixed(2)} | Fuel: $${t.fuel.toFixed(2)}`;
+            const reasonText = t.reason ? ` - ${t.reason}` : '';
+            return `${t.date} | ${t.dest}${reasonText} | ${t.km}km | Toll: $${t.toll.toFixed(2)} | Fuel: $${t.fuel.toFixed(2)}`;
         }).join('\n');
 
         const subject = `Travel Reimbursement - ${currentMonthName}`;
@@ -796,10 +885,28 @@ Generated via Travel Tracker PWA.`;
         setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
+    // --- 9. SYNC BANNER LOGIC ---
+    function checkSyncBanner() {
+        const banner = document.getElementById('sync-warning-banner');
+        if(!banner) return;
+        const isDismissed = localStorage.getItem('hideSyncBanner') === 'true';
+        
+        // Show banner if they haven't connected AND haven't dismissed it
+        if (!accessToken && !driveFileId && !isDismissed) {
+            banner.classList.remove('hidden');
+        } else {
+            banner.classList.add('hidden');
+        }
+    }
+
+    function dismissSyncBanner() {
+        localStorage.setItem('hideSyncBanner', 'true');
+        document.getElementById('sync-warning-banner').classList.add('hidden');
+    }
+
     // Boot App
     window.onload = initApp;
 
 </script>
 </body>
-
 </html>
