@@ -33,7 +33,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow overflow-y-auto hide-scrollbar pb-24 relative px-4 pt-6">
+    <main class="flex-grow overflow-y-auto hide-scrollbar pb-32 relative px-4 pt-6">
         
         <!-- DASHBOARD VIEW -->
         <div id="view-dashboard" class="view hidden space-y-6">
@@ -114,9 +114,17 @@
 
         <!-- LOG TRIP VIEW -->
         <div id="view-log" class="view hidden max-w-md mx-auto">
-            <div id="success-message" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-3 shadow-sm">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <span class="font-bold">Trip saved successfully!</span>
+            <div id="success-message" class="hidden bg-emerald-50 border border-emerald-200 p-5 rounded-2xl mb-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4 text-emerald-800">
+                    <div class="bg-emerald-200/50 p-1.5 rounded-full text-emerald-600">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <span class="font-black text-lg">Trip Saved Successfully!</span>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="document.getElementById('success-message').classList.add('hidden')" class="flex-1 bg-white border border-emerald-200 text-emerald-700 font-extrabold py-3 rounded-xl text-sm hover:bg-emerald-100 transition-colors">Log Another</button>
+                    <button type="button" onclick="switchTab('dashboard')" class="flex-1 bg-emerald-600 text-white font-extrabold py-3 rounded-xl text-sm hover:bg-emerald-700 shadow-md transition-colors">Go to Dashboard</button>
+                </div>
             </div>
 
             <form id="trip-form" class="space-y-5 bg-white p-7 rounded-3xl shadow-lg shadow-blue-900/5 border border-slate-100">
@@ -230,6 +238,11 @@
                 <button id="btn-sync-now" onclick="forceSync()" class="hidden w-full bg-gradient-to-r from-blue-50 to-indigo-50 text-indigo-700 rounded-xl py-3.5 font-extrabold mt-3 hover:from-blue-100 hover:to-indigo-100 transition-all">
                     Force Sync Now
                 </button>
+
+                <!-- Clear Back Button for Non-Tech Users -->
+                <button onclick="switchTab('dashboard')" class="w-full bg-slate-100 text-slate-600 rounded-xl py-3.5 font-extrabold mt-3 hover:bg-slate-200 transition-all">
+                    &larr; Back to Dashboard
+                </button>
             </div>
 
             <div class="bg-white p-7 rounded-3xl shadow-lg shadow-blue-900/5 border border-slate-100">
@@ -246,21 +259,25 @@
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 pb-safe z-20 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)]">
-        <div class="flex justify-around items-center h-16 max-w-md mx-auto px-2">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-600 transition-colors">
-                <svg class="mb-1" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span class="text-[11px] font-bold">Dashboard</span>
+    <nav class="fixed bottom-0 w-full bg-white border-t border-slate-200 pb-safe z-30 shadow-[0_-4px_25px_-5px_rgba(0,0,0,0.05)]">
+        <div class="flex justify-around items-center h-20 max-w-md mx-auto px-2">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-500 transition-colors pt-1">
+                <div class="nav-icon-bg w-14 h-8 flex items-center justify-center rounded-full mb-1 transition-all">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                </div>
+                <span class="text-[13px] font-extrabold tracking-wide">Dashboard</span>
             </button>
-            <button onclick="switchTab('log')" id="nav-log" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-600 transition-colors">
-                <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-full p-3.5 -mt-7 shadow-xl shadow-indigo-300 border-4 border-white transition-transform hover:scale-105">
+            <button onclick="switchTab('log')" id="nav-log" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-500 transition-colors pt-1">
+                <div class="nav-icon-bg w-14 h-8 flex items-center justify-center rounded-full mb-1 transition-all">
                     <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                 </div>
-                <span class="text-[11px] font-bold mt-1">Log Trip</span>
+                <span class="text-[13px] font-extrabold tracking-wide">Add Trip</span>
             </button>
-            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-600 transition-colors">
-                <svg class="mb-1" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span class="text-[11px] font-bold">Settings</span>
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-500 transition-colors pt-1">
+                <div class="nav-icon-bg w-14 h-8 flex items-center justify-center rounded-full mb-1 transition-all">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <span class="text-[13px] font-extrabold tracking-wide">Settings</span>
             </button>
         </div>
     </nav>
@@ -326,12 +343,18 @@
                         document.getElementById('auth-btn-text').innerText = 'Connected';
                         document.getElementById('sync-status').innerHTML = '<span class="text-green-600 font-medium">Synced & Active</span>';
                         document.getElementById('btn-sync-now').classList.remove('hidden');
-                        showToast('Connected to Google Drive');
+                        
                         // Run initial sync check
                         syncWithDrive();
                         
                         // Hide sync banner if visible
                         document.getElementById('sync-warning-banner').classList.add('hidden');
+
+                        // Reassuring Auto-redirect back to dashboard
+                        showToast('Connected! Returning to Dashboard...');
+                        setTimeout(() => {
+                            switchTab('dashboard');
+                        }, 2000);
                     }
                 },
             });
@@ -347,9 +370,18 @@
         void document.getElementById(`view-${tabId}`).offsetWidth; // trigger reflow
         document.getElementById(`view-${tabId}`).classList.add('animate-enter');
 
-        // Update Nav styling
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('text-indigo-600', 'text-blue-600'));
-        if(tabId !== 'log') document.getElementById(`nav-${tabId}`).classList.add('text-indigo-600');
+        // Reset nav styling
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('text-indigo-700');
+            btn.classList.add('text-slate-500');
+            btn.querySelector('.nav-icon-bg').classList.remove('bg-indigo-100');
+        });
+        
+        // Highlight active nav clearly
+        const activeBtn = document.getElementById(`nav-${tabId}`);
+        activeBtn.classList.remove('text-slate-500');
+        activeBtn.classList.add('text-indigo-700');
+        activeBtn.querySelector('.nav-icon-bg').classList.add('bg-indigo-100');
 
         // Update Header
         const titles = { 'dashboard': 'Dashboard', 'log': 'Log a Trip', 'settings': 'Settings' };
@@ -441,7 +473,7 @@
         
         const successMsg = document.getElementById('success-message');
         successMsg.classList.remove('hidden');
-        setTimeout(() => successMsg.classList.add('hidden'), 3000);
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll up to ensure they see it
         
         showToast('Trip logged successfully');
     });
