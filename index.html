@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>My Travel Log</title>
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#020617">
     <link rel="manifest" href="manifest.json">
     
-    <!-- FIX: Added Apple Touch Icon so it is not a white button on iPhone -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCA1MTIgNTEyIj48Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI1NiIgZmlsbD0iIzRmNDZlNSIvPjxwYXRoIGQ9Ik00MDggMzAzdjY4YTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtMzJIMTYwdjMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtNjhsMjctMTA3YTU2IDU2IDAgMCAxIDU0LTQ0aDE0MmE1NiA1NiAwIDAgMSA1NCA0NHptLTk2LTU1YTE2IDE2IDAgMSAwLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2em0tMTYwIDBhMTYgMTYgMCAxIDAgLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzAyMDYxNyIvPjxwYXRoIGQ9Ik00MDggMzAzdjY4YTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtMzJIMTYwdjMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtNjhsMjctMTA3YTU2IDU2IDAgMCAxIDU0LTQ0aDE0MmE1NiA1NiAwIDAgMSA1NCA0NHptLTk2LTU1YTE2IDE2IDAgMSAwLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2em0tMTYwIDBhMTYgMTYgMCAxIDAgLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2eiIgZmlsbD0iIzgxOGNmOCIvPjwvc3ZnPg==">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <style>
+        /* Native dark mode inputs (calendar picker) */
+        :root {
+            color-scheme: dark;
+        }
+
         /* Mobile tweaks */
         body { -webkit-tap-highlight-color: transparent; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -28,75 +33,75 @@
         .animate-enter { animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-white to-indigo-50 text-slate-800 font-sans antialiased h-screen flex flex-col overflow-hidden">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased h-screen flex flex-col overflow-hidden selection:bg-indigo-900">
 
     <!-- App Header -->
-    <header class="bg-white/80 backdrop-blur-md px-6 pt-10 pb-4 shadow-sm z-10 flex-shrink-0 border-b border-slate-100 text-center">
-        <h1 id="header-title" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tight">My Travel Log</h1>
+    <header class="bg-slate-900/90 backdrop-blur-md px-6 pt-10 pb-4 shadow-sm z-10 flex-shrink-0 border-b border-slate-800 text-center">
+        <h1 id="header-title" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400 tracking-tight">My Travel Log</h1>
     </header>
 
     <!-- Content Area -->
-    <main class="flex-grow overflow-y-auto hide-scrollbar pb-32 relative px-4 pt-6">
+    <main class="flex-grow overflow-y-auto hide-scrollbar pb-32 relative px-4 pt-6 bg-slate-950">
         
         <!-- 1. DASHBOARD VIEW (THE LEDGER) -->
         <div id="view-dashboard" class="view hidden space-y-6">
             
             <!-- Ledger Header: Month & Primary Action -->
-            <div class="flex justify-between items-center bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center bg-slate-800 p-5 rounded-3xl shadow-lg border border-slate-700">
                 <div>
                     <p class="text-[10px] font-extrabold tracking-widest text-indigo-400 uppercase mb-1">Viewing</p>
-                    <h2 class="text-2xl font-black text-slate-800 leading-none" id="current-month-title">Current Month</h2>
+                    <h2 class="text-2xl font-black text-slate-100 leading-none" id="current-month-title">Current Month</h2>
                 </div>
-                <button onclick="copyReportSummary()" class="flex flex-col items-center justify-center bg-indigo-50 text-indigo-600 px-4 py-2.5 rounded-2xl font-bold hover:bg-indigo-100 hover:scale-105 active:scale-95 transition-all gap-1 border border-indigo-100/50 shadow-sm">
+                <button onclick="copyReportSummary()" class="flex flex-col items-center justify-center bg-indigo-900/30 text-indigo-400 px-4 py-2.5 rounded-2xl font-bold hover:bg-indigo-800/40 hover:scale-105 active:scale-95 transition-all gap-1 border border-indigo-800/50 shadow-sm">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                     <span class="text-[10px] uppercase tracking-widest font-extrabold text-center">Copy Summary</span>
                 </button>
             </div>
 
             <!-- Smart Sync Banner -->
-            <div id="sync-warning-banner" class="hidden bg-amber-50 border border-amber-100 p-4 rounded-2xl flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between shadow-sm">
+            <div id="sync-warning-banner" class="hidden bg-amber-950/30 border border-amber-900/50 p-4 rounded-2xl flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between shadow-sm">
                 <div class="flex gap-3 items-start">
-                    <div class="text-amber-600 mt-0.5">
+                    <div class="text-amber-500 mt-0.5">
                         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-amber-900">Sync with Google Drive</p>
-                        <p class="text-xs text-amber-700/80 mt-0.5 font-medium leading-relaxed">Backup trips to your Drive to prevent data loss.</p>
+                        <p class="text-sm font-bold text-amber-400">Sync with Google Drive</p>
+                        <p class="text-xs text-amber-500/80 mt-0.5 font-medium leading-relaxed">Backup trips to your Drive to prevent data loss.</p>
                     </div>
                 </div>
                 <button onclick="switchTab('settings')" class="px-4 py-2 bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-amber-700 transition-colors">Connect Now</button>
             </div>
 
             <!-- Monthly Summary Row -->
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+            <div class="bg-slate-800 p-6 rounded-3xl shadow-lg border border-slate-700">
                 <h3 class="text-sm font-extrabold tracking-widest text-slate-400 uppercase mb-4 text-center">Monthly Summary</h3>
-                <div class="grid grid-cols-3 gap-2 divide-x divide-slate-100">
+                <div class="grid grid-cols-3 gap-2 divide-x divide-slate-700/50">
                     <div class="text-center px-1">
                         <p class="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-tighter">Distance</p>
-                        <p class="text-2xl font-black text-blue-600"><span id="dash-km">0</span><span class="text-xs text-blue-400 font-medium ml-0.5 uppercase tracking-tighter">km</span></p>
+                        <p class="text-2xl font-black text-blue-400"><span id="dash-km">0</span><span class="text-xs text-blue-500 font-medium ml-0.5 uppercase tracking-tighter">km</span></p>
                     </div>
                     <div class="text-center px-1">
                         <p class="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-tighter">Tolls</p>
-                        <p class="text-2xl font-black text-purple-600"><span class="text-sm text-purple-400 font-medium mr-0.5">$</span><span id="dash-toll">0.00</span></p>
+                        <p class="text-2xl font-black text-purple-400"><span class="text-sm text-purple-500 font-medium mr-0.5">$</span><span id="dash-toll">0.00</span></p>
                     </div>
                     <div class="text-center px-1">
                         <p class="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-tighter">Fuel</p>
-                        <p class="text-2xl font-black text-rose-600"><span class="text-sm text-rose-400 font-medium mr-0.5">$</span><span id="dash-fuel">0.00</span></p>
+                        <p class="text-2xl font-black text-rose-400"><span class="text-sm text-rose-500 font-medium mr-0.5">$</span><span id="dash-fuel">0.00</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- Ledger: Itemized List -->
             <div class="mt-8">
-                <h3 class="text-sm font-extrabold tracking-widest text-indigo-400/80 uppercase mb-4 pl-1">This Month's Trips</h3>
-                <div id="current-month-trips" class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                <h3 class="text-sm font-extrabold tracking-widest text-indigo-400 uppercase mb-4 pl-1">This Month's Trips</h3>
+                <div id="current-month-trips" class="bg-slate-800 rounded-3xl shadow-lg border border-slate-700 overflow-hidden">
                     <!-- Dynamic entries -->
                 </div>
             </div>
 
             <!-- Past Archive -->
             <div class="mt-8">
-                <h3 class="text-sm font-extrabold tracking-widest text-slate-400 uppercase mb-4 pl-1">Past Months Archive</h3>
+                <h3 class="text-sm font-extrabold tracking-widest text-slate-500 uppercase mb-4 pl-1">Past Months Archive</h3>
                 <div id="archive-container" class="space-y-3">
                     <!-- Dynamic archive -->
                 </div>
@@ -105,85 +110,72 @@
 
         <!-- 2. ADD TRIP VIEW -->
         <div id="view-log" class="view hidden max-w-md mx-auto">
-            <div id="success-message" class="hidden bg-emerald-50 border border-emerald-200 p-6 rounded-3xl mb-6 shadow-md animate-enter">
-                <div class="flex items-center gap-4 mb-5 text-emerald-800">
-                    <div class="bg-emerald-500 text-white p-2 rounded-full shadow-lg shadow-emerald-200">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <span class="font-black text-xl">Trip Saved!</span>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <button type="button" onclick="document.getElementById('success-message').classList.add('hidden')" class="bg-white border-2 border-emerald-200 text-emerald-700 font-black py-3.5 rounded-2xl text-sm hover:bg-white shadow-sm transition-all">Log Another</button>
-                    <button type="button" onclick="switchTab('dashboard')" class="bg-emerald-600 text-white font-black py-3.5 rounded-2xl text-sm shadow-xl shadow-emerald-200 transition-all hover:bg-emerald-700">See Ledger</button>
-                </div>
-            </div>
-
-            <form id="trip-form" class="space-y-5 bg-white p-7 rounded-3xl shadow-lg border border-slate-100">
+            <form id="trip-form" class="space-y-5 bg-slate-800 p-7 rounded-3xl shadow-lg border border-slate-700">
                 <input type="text" id="hp-website" style="display:none" tabindex="-1" autocomplete="off">
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1 tracking-tight">Date</label>
-                    <input type="date" id="input-date" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all font-medium">
+                    <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1 tracking-tight">Date</label>
+                    <input type="date" id="input-date" required class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none transition-all font-medium appearance-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1 tracking-tight">Destination</label>
-                    <input type="text" id="input-dest" required placeholder="e.g. Health Center" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all font-medium">
+                    <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1 tracking-tight">Destination</label>
+                    <input type="text" id="input-dest" required placeholder="e.g. Health Center" class="w-full bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none transition-all font-medium">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1 tracking-tight">Reason for Visit</label>
-                    <input type="text" id="input-reason" required placeholder="e.g. Weekly Meeting" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all font-medium">
+                    <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1 tracking-tight">Reason for Visit</label>
+                    <input type="text" id="input-reason" required placeholder="e.g. Weekly Meeting" class="w-full bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none transition-all font-medium">
                 </div>
-                <div class="flex items-center gap-3 bg-slate-50 px-4 py-4 border border-slate-200 rounded-2xl">
-                    <input type="checkbox" id="input-round-trip" onchange="document.getElementById('return-trip-fields').classList.toggle('hidden');" class="w-6 h-6 text-indigo-600 rounded-lg focus:ring-indigo-500 accent-indigo-600 cursor-pointer">
-                    <label for="input-round-trip" class="text-sm font-bold text-slate-700 cursor-pointer select-none">Add Return Trip (Different route)</label>
+                <div class="flex items-center gap-3 bg-slate-900 px-4 py-4 border border-slate-700 rounded-2xl">
+                    <input type="checkbox" id="input-round-trip" onchange="document.getElementById('return-trip-fields').classList.toggle('hidden');" class="w-6 h-6 text-indigo-500 rounded-lg focus:ring-indigo-500 accent-indigo-500 cursor-pointer">
+                    <label for="input-round-trip" class="text-sm font-bold text-slate-300 cursor-pointer select-none">Add Return Trip (Different route)</label>
                 </div>
                 <div>
                     <div class="flex justify-between items-end mb-1.5 pr-1">
-                        <label class="block text-sm font-bold text-slate-700 pl-1 tracking-tight">Distance to Destination (km)</label>
-                        <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2.5 py-1 rounded-lg border border-indigo-100 flex items-center gap-1 hover:bg-indigo-100 active:scale-95 transition-all shadow-sm">
+                        <label class="block text-sm font-bold text-slate-300 pl-1 tracking-tight">Distance to Destination (km)</label>
+                        <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-900/30 text-indigo-400 font-black px-2.5 py-1 rounded-lg border border-indigo-800/50 flex items-center gap-1 hover:bg-indigo-800/50 active:scale-95 transition-all shadow-sm">
                             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Map Check
                         </button>
                     </div>
-                    <input type="number" id="input-km" required min="0" max="1500" step="0.1" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all font-medium">
+                    <input type="number" id="input-km" required min="0" max="1500" step="0.1" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none transition-all font-medium">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1">Toll ($)</label>
-                        <input type="number" id="input-toll" required min="0" step="0.01" value="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
+                        <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1">Toll ($)</label>
+                        <input type="number" id="input-toll" min="0" step="0.01" value="0.00" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1">Fuel ($)</label>
-                        <input type="number" id="input-fuel" required min="0" step="0.01" value="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
+                        <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1">Fuel ($)</label>
+                        <input type="number" id="input-fuel" min="0" step="0.01" value="0.00" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none font-medium">
                     </div>
                 </div>
-                <div id="return-trip-fields" class="hidden space-y-5 pt-5 border-t border-slate-100">
+                <div id="return-trip-fields" class="hidden space-y-5 pt-5 border-t border-slate-700">
                     <h4 class="text-xs font-black text-indigo-400 uppercase tracking-widest text-center">Return Journey Details</h4>
                     <div>
                         <div class="flex justify-between items-end mb-1.5 pr-1">
-                            <label class="block text-sm font-bold text-slate-700 pl-1 tracking-tight">Distance Back (km)</label>
-                            <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2.5 py-1 rounded-lg border border-indigo-100 flex items-center gap-1 hover:bg-indigo-100 active:scale-95 transition-all shadow-sm">
+                            <label class="block text-sm font-bold text-slate-300 pl-1 tracking-tight">Distance Back (km)</label>
+                            <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-900/30 text-indigo-400 font-black px-2.5 py-1 rounded-lg border border-indigo-800/50 flex items-center gap-1 hover:bg-indigo-800/50 active:scale-95 transition-all shadow-sm">
                                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                 Map Check
                             </button>
                         </div>
-                        <input type="number" id="input-return-km" min="0" max="1500" step="0.1" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
+                        <input type="number" id="input-return-km" min="0" max="1500" step="0.1" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none font-medium">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1">Return Toll ($)</label>
-                            <input type="number" id="input-return-toll" min="0" step="0.01" value="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
+                            <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1">Return Toll ($)</label>
+                            <input type="number" id="input-return-toll" min="0" step="0.01" value="0.00" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none font-medium">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1">Return Fuel ($)</label>
-                            <input type="number" id="input-return-fuel" min="0" step="0.01" value="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
+                            <label class="block text-sm font-bold text-slate-300 mb-1.5 pl-1">Return Fuel ($)</label>
+                            <input type="number" id="input-return-fuel" min="0" step="0.01" value="0.00" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/50 outline-none font-medium">
                         </div>
                     </div>
                 </div>
                 <div class="pt-2">
-                    <label class="block text-sm font-bold text-slate-700 mb-2 pl-1">Receipt Photos</label>
-                    <div class="mt-1 flex justify-center px-6 py-6 border-2 border-slate-200 border-dashed rounded-2xl bg-slate-50 hover:border-indigo-300 transition-all group">
+                    <label class="block text-sm font-bold text-slate-300 mb-2 pl-1">Receipt Photos</label>
+                    <div class="mt-1 flex justify-center px-6 py-6 border-2 border-slate-700 border-dashed rounded-2xl bg-slate-900 hover:border-indigo-500/50 transition-all group">
                         <div class="space-y-2 text-center">
-                            <label for="file-upload" class="cursor-pointer bg-white border border-indigo-200 text-indigo-600 px-6 py-2.5 rounded-xl font-black text-sm shadow-sm inline-block group-hover:bg-indigo-50 transition-all active:scale-95">
+                            <label for="file-upload" class="cursor-pointer bg-slate-800 border border-slate-700 text-indigo-400 px-6 py-2.5 rounded-xl font-black text-sm shadow-sm inline-block hover:bg-slate-700 transition-all active:scale-95">
                                 <span>+ Choose Photos</span>
                                 <input id="file-upload" type="file" accept="image/*" multiple class="sr-only" onchange="handleFileSelect(event)">
                             </label>
@@ -191,52 +183,53 @@
                     </div>
                     <div id="receipt-preview" class="flex flex-wrap gap-3 mt-4 empty:hidden"></div>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl py-4 mt-6 font-black shadow-xl shadow-indigo-200 active:scale-[0.98] transition-all flex justify-center items-center gap-3">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
-                    Save Trip
+                
+                <button type="submit" id="btn-submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl py-4 mt-6 font-black shadow-lg shadow-indigo-900/20 active:scale-[0.98] transition-all flex justify-center items-center gap-3">
+                    <svg id="btn-submit-icon" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                    <span id="btn-submit-text">Save Trip</span>
                 </button>
             </form>
         </div>
 
         <!-- 3. SETTINGS VIEW -->
         <div id="view-settings" class="view hidden space-y-6 max-w-md mx-auto">
-            <div class="bg-white p-7 rounded-3xl shadow-lg border border-slate-100 text-center">
-                <div class="w-20 h-20 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-600 mx-auto mb-5 shadow-inner">
+            <div class="bg-slate-800 p-7 rounded-3xl shadow-lg border border-slate-700 text-center">
+                <div class="w-20 h-20 rounded-3xl bg-indigo-900/30 flex items-center justify-center text-indigo-400 mx-auto mb-5 border border-indigo-800/50 shadow-inner">
                     <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                 </div>
-                <h3 class="font-black text-slate-800 text-2xl mb-2">Cloud Backup</h3>
-                <p id="sync-status" class="text-sm font-medium text-slate-500 mb-8 px-4 leading-relaxed">Save logs to your Google Drive account.</p>
+                <h3 class="font-black text-slate-100 text-2xl mb-2">Cloud Backup</h3>
+                <p id="sync-status" class="text-sm font-medium text-slate-400 mb-8 px-4 leading-relaxed">Save logs to your Google Drive account.</p>
                 <div class="space-y-3">
-                    <button id="btn-auth" onclick="handleAuthClick()" class="w-full bg-white border-2 border-indigo-100 text-indigo-700 rounded-2xl py-4 font-black flex justify-center items-center gap-3 active:scale-95 transition-all">Connect My Account</button>
-                    <button id="btn-sync-now" onclick="forceSync()" class="hidden w-full bg-indigo-50 text-indigo-700 rounded-2xl py-4 font-black">Sync Now</button>
-                    <button onclick="switchTab('dashboard')" class="w-full bg-slate-50 text-slate-500 rounded-2xl py-4 font-bold text-sm border border-slate-100 active:scale-95">Back to Ledger</button>
+                    <button id="btn-auth" onclick="handleAuthClick()" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl py-4 font-black flex justify-center items-center gap-3 active:scale-95 transition-all hover:bg-slate-700">Connect My Account</button>
+                    <button id="btn-sync-now" onclick="forceSync()" class="hidden w-full bg-indigo-900/30 border border-indigo-800/50 text-indigo-400 rounded-2xl py-4 font-black">Sync Now</button>
+                    <button onclick="switchTab('dashboard')" class="w-full bg-slate-900 text-slate-300 rounded-2xl py-4 font-bold text-sm border border-slate-700 active:scale-95 hover:bg-slate-700 transition-colors">Back to Ledger</button>
                 </div>
             </div>
-            <div class="bg-white p-7 rounded-3xl border border-slate-100">
-                <h3 class="font-black text-slate-800 mb-4 pl-1">Maintenance</h3>
-                <button onclick="exportLocalJSON()" class="w-full bg-slate-50 text-slate-600 rounded-2xl py-3.5 font-bold mb-3 border border-slate-100 text-sm">Download Local JSON</button>
-                <button onclick="clearLocalData()" class="w-full bg-rose-50 text-rose-600 rounded-2xl py-3.5 font-bold text-sm">Clear Phone Cache</button>
+            <div class="bg-slate-800 p-7 rounded-3xl border border-slate-700 shadow-lg">
+                <h3 class="font-black text-slate-100 mb-4 pl-1">Maintenance</h3>
+                <button onclick="exportLocalJSON()" class="w-full bg-slate-900 text-slate-300 rounded-2xl py-3.5 font-bold mb-3 border border-slate-700 text-sm hover:bg-slate-700 transition-colors">Download Local JSON</button>
+                <button onclick="clearLocalData()" class="w-full bg-rose-900/20 text-rose-400 rounded-2xl py-3.5 font-bold text-sm border border-rose-900/50 hover:bg-rose-900/40 transition-colors">Clear Phone Cache</button>
             </div>
         </div>
     </main>
 
     <!-- Navigation -->
-    <nav class="fixed bottom-0 w-full bg-white border-t border-slate-200 pb-safe z-30 shadow-[0_-4px_30px_rgba(0,0,0,0.08)]">
+    <nav class="fixed bottom-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 pb-safe z-30 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
         <div class="flex justify-around items-center h-20 max-w-md mx-auto px-4">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-indigo-600">
-                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1 bg-indigo-100 shadow-inner">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-indigo-400 transition-colors">
+                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1 bg-indigo-900/30 text-indigo-400 transition-colors">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 </div>
                 <span class="text-[11px] font-black uppercase opacity-90">Ledger</span>
             </button>
-            <button onclick="switchTab('log')" id="nav-log" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-slate-400">
-                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1">
+            <button onclick="switchTab('log')" id="nav-log" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-slate-500 hover:text-slate-300 transition-colors">
+                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1 transition-colors">
                     <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                 </div>
                 <span class="text-[11px] font-black uppercase opacity-90">Add Trip</span>
             </button>
-            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-slate-400">
-                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1">
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex-1 flex flex-col items-center justify-center pt-1 text-slate-500 hover:text-slate-300 transition-colors">
+                <div class="nav-icon-bg w-14 h-9 flex items-center justify-center rounded-full mb-1 transition-colors">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                 </div>
                 <span class="text-[11px] font-black uppercase opacity-90">Settings</span>
@@ -244,12 +237,12 @@
         </div>
     </nav>
 
-    <div id="toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-8 py-3.5 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 text-sm font-black border border-white/10">Message</div>
+    <div id="toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-800 text-slate-100 border border-slate-700 px-8 py-3.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 text-sm font-bold backdrop-blur-sm">Message</div>
 
-    <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-slate-900/95 backdrop-blur-sm flex-col justify-center items-center p-4 opacity-0 transition-all duration-300">
+    <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-sm flex-col justify-center items-center p-4 opacity-0 transition-all duration-300">
         <div class="w-full max-w-md flex justify-between items-center mb-4 pt-8">
-            <h3 class="text-white font-black text-lg uppercase tracking-widest pl-2">My Receipts</h3>
-            <button onclick="closeReceiptModal()" class="text-white bg-white/20 rounded-full p-2.5 transition-all"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <h3 class="text-slate-100 font-black text-lg uppercase tracking-widest pl-2">My Receipts</h3>
+            <button onclick="closeReceiptModal()" class="text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full p-2.5 transition-all"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
         </div>
         <div id="modal-images" class="w-full max-w-md overflow-y-auto max-h-[75vh] flex flex-col gap-6 items-center pb-20 hide-scrollbar px-2"></div>
     </div>
@@ -279,7 +272,7 @@
                 callback: (tokenResponse) => {
                     if (tokenResponse && tokenResponse.access_token) {
                         accessToken = tokenResponse.access_token;
-                        document.getElementById('sync-status').innerHTML = '<span class="text-green-600 font-black">Sync Active</span>';
+                        document.getElementById('sync-status').innerHTML = '<span class="text-emerald-400 font-black">Sync Active</span>';
                         document.getElementById('btn-sync-now').classList.remove('hidden');
                         document.getElementById('btn-auth').classList.add('hidden');
                         syncWithDrive();
@@ -299,12 +292,12 @@
         el.classList.remove('hidden', 'animate-enter');
         void el.offsetWidth; el.classList.add('animate-enter');
         document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('text-indigo-600'); btn.classList.add('text-slate-400');
-            btn.querySelector('.nav-icon-bg').classList.remove('bg-indigo-100', 'shadow-inner', 'text-indigo-600');
+            btn.classList.remove('text-indigo-400'); btn.classList.add('text-slate-500');
+            btn.querySelector('.nav-icon-bg').classList.remove('bg-indigo-900/30', 'text-indigo-400');
         });
         const activeBtn = document.getElementById(`nav-${tabId}`);
-        activeBtn.classList.remove('text-slate-400'); activeBtn.classList.add('text-indigo-600');
-        activeBtn.querySelector('.nav-icon-bg').classList.add('bg-indigo-100', 'shadow-inner', 'text-indigo-600');
+        activeBtn.classList.remove('text-slate-500'); activeBtn.classList.add('text-indigo-400');
+        activeBtn.querySelector('.nav-icon-bg').classList.add('bg-indigo-900/30', 'text-indigo-400');
         const titles = { 'dashboard': 'My Travel Log', 'log': 'Log a Journey', 'settings': 'App Settings' };
         document.getElementById('header-title').innerText = titles[tabId];
         if(tabId === 'dashboard') renderDashboard();
@@ -313,25 +306,64 @@
     document.getElementById('trip-form').addEventListener('submit', function(e) {
         e.preventDefault();
         if (document.getElementById('hp-website').value !== '') return;
-        const date = document.getElementById('input-date').value;
-        let dest = document.getElementById('input-dest').value.trim();
-        let reason = document.getElementById('input-reason').value.trim();
-        let km = parseFloat(document.getElementById('input-km').value);
-        let toll = parseFloat(document.getElementById('input-toll').value);
-        let fuel = parseFloat(document.getElementById('input-fuel').value);
-        if (document.getElementById('input-round-trip').checked) {
-            const rKm = parseFloat(document.getElementById('input-return-km').value) || 0;
-            const rToll = parseFloat(document.getElementById('input-return-toll').value) || 0;
-            const rFuel = parseFloat(document.getElementById('input-return-fuel').value) || 0;
-            dest += " (Round Trip)"; km += rKm; toll += rToll; fuel += rFuel;
-        }
-        const trip = { id: Date.now().toString(), date, dest, reason, km, toll, fuel, receipts: currentReceipts.filter(r => r !== null) };
-        trips.push(trip); trips.sort((a, b) => new Date(b.date) - new Date(a.date));
-        saveLocalData(); triggerBackgroundSync(); this.reset();
-        document.getElementById('input-date').valueAsDate = new Date(); document.getElementById('return-trip-fields').classList.add('hidden');
-        currentReceipts = []; document.getElementById('receipt-preview').innerHTML = '';
-        document.getElementById('success-message').classList.remove('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' }); showToast('Entry Saved!');
+        
+        const btn = document.getElementById('btn-submit');
+        const originalClasses = btn.className;
+        const btnText = document.getElementById('btn-submit-text');
+        const btnIcon = document.getElementById('btn-submit-icon');
+        
+        // UI Feedback: Start Saving
+        btnText.innerText = "Saving...";
+        btnIcon.classList.add('hidden');
+        btn.classList.add('opacity-80', 'pointer-events-none');
+
+        setTimeout(() => {
+            const date = document.getElementById('input-date').value;
+            let dest = document.getElementById('input-dest').value.trim();
+            let reason = document.getElementById('input-reason').value.trim();
+            let km = parseFloat(document.getElementById('input-km').value);
+            let toll = parseFloat(document.getElementById('input-toll').value) || 0;
+            let fuel = parseFloat(document.getElementById('input-fuel').value) || 0;
+            
+            if (document.getElementById('input-round-trip').checked) {
+                const rKm = parseFloat(document.getElementById('input-return-km').value) || 0;
+                const rToll = parseFloat(document.getElementById('input-return-toll').value) || 0;
+                const rFuel = parseFloat(document.getElementById('input-return-fuel').value) || 0;
+                dest += " (Round Trip)"; km += rKm; toll += rToll; fuel += rFuel;
+            }
+            
+            // Generate safe ID for offline/local use
+            const safeId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+            const trip = { id: safeId, date, dest, reason, km, toll, fuel, receipts: currentReceipts.filter(r => r !== null) };
+            
+            trips.push(trip); 
+            trips.sort((a, b) => new Date(b.date) - new Date(a.date));
+            saveLocalData(); 
+            triggerBackgroundSync(); 
+            
+            // UI Feedback: Success State
+            btnText.innerText = "Success! ✓";
+            btn.className = "w-full bg-emerald-500 text-white rounded-2xl py-4 mt-6 font-black shadow-xl shadow-emerald-900/20 transition-all pointer-events-none flex justify-center items-center gap-3";
+            
+            // Auto-redirect and reset after a tiny delay
+            setTimeout(() => {
+                this.reset();
+                document.getElementById('input-date').valueAsDate = new Date(); 
+                document.getElementById('return-trip-fields').classList.add('hidden');
+                currentReceipts = []; 
+                document.getElementById('receipt-preview').innerHTML = '';
+                
+                // Restore original button state
+                btn.className = originalClasses;
+                btnText.innerText = "Save Trip";
+                btnIcon.classList.remove('hidden');
+                
+                switchTab('dashboard');
+                showToast('Entry Saved!', 'success');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 800);
+            
+        }, 150);
     });
 
     function renderDashboard() {
@@ -350,19 +382,19 @@
         document.getElementById('dash-toll').innerText = sumToll.toFixed(2);
         document.getElementById('dash-fuel').innerText = sumFuel.toFixed(2);
         const list = document.getElementById('current-month-trips'); list.innerHTML = '';
-        if (currentTrips.length === 0) list.innerHTML = `<div class="p-12 text-center bg-white/50"><p class="text-sm font-bold text-slate-300 uppercase tracking-widest italic">Ledger Empty</p></div>`;
+        if (currentTrips.length === 0) list.innerHTML = `<div class="p-12 text-center bg-slate-800/50"><p class="text-sm font-bold text-slate-500 uppercase tracking-widest italic">Ledger Empty</p></div>`;
         else currentTrips.forEach(t => {
             const [y, m, d] = t.date.split('-');
-            let btn = t.receipts && t.receipts.length > 0 ? `<button onclick="openReceiptModal('${t.id}')" class="text-indigo-600 text-xs font-black bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100 flex items-center gap-1.5 active:scale-95 transition-all"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> ${t.receipts.length}</button>` : '';
-            const div = document.createElement('div'); div.className = "p-5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all";
-            div.innerHTML = `<div class="flex justify-between items-start mb-3"><div class="pr-2"><p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">${monthNames[parseInt(m)-1]} ${d}</p><p class="text-sm font-black text-slate-800 leading-tight">${t.dest}</p><p class="text-xs font-bold text-slate-400 italic mt-0.5">${t.reason}</p></div>${btn}</div><div class="flex flex-wrap gap-2 text-[10px] font-black text-slate-500 bg-slate-50 border border-slate-100 p-2.5 rounded-xl uppercase tracking-tighter"><span class="text-blue-600">${t.km.toFixed(1)} km</span><span class="text-slate-200">•</span><span class="text-purple-600">$${t.toll.toFixed(2)} toll</span><span class="text-slate-200">•</span><span class="text-rose-600">$${t.fuel.toFixed(2)} fuel</span></div>`;
+            let btn = t.receipts && t.receipts.length > 0 ? `<button onclick="openReceiptModal('${t.id}')" class="text-indigo-400 text-xs font-black bg-indigo-900/30 px-3 py-2 rounded-xl border border-indigo-800/50 flex items-center gap-1.5 active:scale-95 transition-all"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> ${t.receipts.length}</button>` : '';
+            const div = document.createElement('div'); div.className = "p-5 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/30 transition-all";
+            div.innerHTML = `<div class="flex justify-between items-start mb-3"><div class="pr-2"><p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">${monthNames[parseInt(m)-1]} ${d}</p><p class="text-sm font-black text-slate-100 leading-tight">${t.dest}</p><p class="text-xs font-bold text-slate-400 italic mt-0.5">${t.reason}</p></div>${btn}</div><div class="flex flex-wrap gap-2 text-[10px] font-black text-slate-400 bg-slate-900/50 border border-slate-700/50 p-2.5 rounded-xl uppercase tracking-tighter"><span class="text-blue-400">${t.km.toFixed(1)} km</span><span class="text-slate-600">•</span><span class="text-purple-400">$${t.toll.toFixed(2)} toll</span><span class="text-slate-600">•</span><span class="text-rose-400">$${t.fuel.toFixed(2)} fuel</span></div>`;
             list.appendChild(div);
         });
         const arc = document.getElementById('archive-container'); arc.innerHTML = '';
         Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(k => {
             const d = groups[k]; const [yr, mn] = k.split('-');
-            const card = document.createElement('div'); card.className = "bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden";
-            card.innerHTML = `<button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full px-5 py-4 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white font-black text-slate-700 text-sm uppercase tracking-wide underline decoration-indigo-200 underline-offset-4">${fullNames[parseInt(mn)-1]} ${yr} <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-lg text-[10px] ml-auto mr-4">${d.count} items</span></button><div class="hidden px-5 py-5 space-y-3 border-t border-slate-100 bg-slate-50/30 text-xs font-bold text-slate-500 uppercase tracking-wider"><div class="flex justify-between items-center"><span>Distance</span><span class="text-blue-600 font-black text-base">${d.km.toFixed(1)} km</span></div><div class="flex justify-between items-center"><span>Tolls</span><span class="text-purple-600 font-black text-base">$${d.toll.toFixed(2)}</span></div><div class="flex justify-between items-center"><span>Fuel</span><span class="text-rose-600 font-black text-base">$${d.fuel.toFixed(2)}</span></div></div>`;
+            const card = document.createElement('div'); card.className = "bg-slate-800 rounded-2xl shadow-sm border border-slate-700 overflow-hidden";
+            card.innerHTML = `<button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full px-5 py-4 flex justify-between items-center bg-slate-800 font-black text-slate-200 text-sm uppercase tracking-wide underline decoration-indigo-500/50 underline-offset-4 hover:bg-slate-700/50 transition-colors">${fullNames[parseInt(mn)-1]} ${yr} <span class="bg-indigo-900/30 text-indigo-400 px-2 py-0.5 rounded-lg text-[10px] ml-auto mr-4 border border-indigo-800/50">${d.count} items</span></button><div class="hidden px-5 py-5 space-y-3 border-t border-slate-700 bg-slate-900/50 text-xs font-bold text-slate-400 uppercase tracking-wider"><div class="flex justify-between items-center"><span>Distance</span><span class="text-blue-400 font-black text-base">${d.km.toFixed(1)} km</span></div><div class="flex justify-between items-center"><span>Tolls</span><span class="text-purple-400 font-black text-base">$${d.toll.toFixed(2)}</span></div><div class="flex justify-between items-center"><span>Fuel</span><span class="text-rose-400 font-black text-base">$${d.fuel.toFixed(2)}</span></div></div>`;
             arc.appendChild(card);
         });
         checkSyncBanner();
@@ -378,7 +410,7 @@
         let tKm = 0, tToll = 0, tFuel = 0;
         let itm = currentTrips.map(t => { tKm += t.km; tToll += t.toll; tFuel += t.fuel; return `${t.date} | ${t.dest} (${t.reason}) | ${t.km.toFixed(1)}km | $${t.toll.toFixed(2)} Toll | $${t.fuel.toFixed(2)} Fuel`; }).join('\n');
         const sum = `TRAVEL LOG SUMMARY - ${currentMonthName}\n\nTOTALS:\n- Kilometers: ${tKm.toFixed(1)} km\n- Tolls: $${tToll.toFixed(2)}\n- Fuel: $${tFuel.toFixed(2)}\n\nITEMIZED TRIP LIST:\n${itm}\n\nOrganized via My Travel Log.`;
-        const ta = document.createElement("textarea"); ta.value = sum; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast("Copied! Paste into your form.");
+        const ta = document.createElement("textarea"); ta.value = sum; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast("Copied! Paste into your form.", "success");
     }
 
     function handleAuthClick() { tokenClient.requestAccessToken({prompt: 'consent'}); }
@@ -407,8 +439,8 @@
                     else if (trips.length > (cloudData.trips?.length || 0)) await uploadToDrive(true);
                 } catch(e) {}
             } else await uploadToDrive(false);
-            document.getElementById('sync-status').innerHTML = '<span class="text-emerald-600 font-black">Sync On</span>';
-        } catch (error) { document.getElementById('sync-status').innerHTML = '<span class="text-amber-500 font-black">Sync Off</span>'; }
+            document.getElementById('sync-status').innerHTML = '<span class="text-emerald-400 font-black">Sync On</span>';
+        } catch (error) { document.getElementById('sync-status').innerHTML = '<span class="text-amber-400 font-black">Sync Off</span>'; }
     }
 
     async function uploadToDrive(isUpdate) {
@@ -424,12 +456,24 @@
     function saveLocalData() { localStorage.setItem('travelTrips', JSON.stringify(trips)); }
     function clearLocalData() { if(confirm("Clear phone memory? Drive remains safe.")) { localStorage.clear(); location.reload(); } }
     function exportLocalJSON() { const d = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({trips})); const n = document.createElement('a'); n.setAttribute("href", d); n.setAttribute("download", "travel-log.json"); n.click(); }
-    function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2200); }
+    
+    function showToast(m, type = 'info') { 
+        const t = document.getElementById('toast'); 
+        t.innerText = m;
+        if (type === 'success') {
+            t.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-emerald-900/90 text-emerald-100 border border-emerald-800 px-8 py-3.5 rounded-full shadow-lg transition-all duration-300 z-50 text-sm font-bold backdrop-blur-sm toast-enter';
+        } else {
+            t.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-800 text-slate-100 border border-slate-700 px-8 py-3.5 rounded-full shadow-lg transition-all duration-300 z-50 text-sm font-bold backdrop-blur-sm toast-enter';
+        }
+        setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.transform = 'translate(-50%, -20px)';
+        }, 2200); 
+    }
 
     function openGoogleMaps() {
         const dest = document.getElementById('input-dest').value.trim();
         if (!dest) { showToast("Type a destination first!"); return; }
-        // Automatically opens a directions page from the user's current location to the typed destination
         window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`, '_blank');
     }
 
@@ -438,8 +482,8 @@
         for (let file of files) {
             try {
                 const b64 = await compressImage(file); currentReceipts.push(b64);
-                const div = document.createElement('div'); div.className = 'relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-white shadow-md animate-enter';
-                div.innerHTML = `<img src="${b64}" class="w-full h-full object-cover"><button type="button" onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-rose-500 text-white rounded-bl-xl p-1 font-black text-[10px]">X</button>`;
+                const div = document.createElement('div'); div.className = 'relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-md animate-enter';
+                div.innerHTML = `<img src="${b64}" class="w-full h-full object-cover"><button type="button" onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-rose-900/80 hover:bg-rose-900 text-white rounded-bl-xl p-1.5 font-black text-[10px] transition-colors">X</button>`;
                 document.getElementById('receipt-preview').appendChild(div);
             } catch(err) { showToast("Photo error."); }
         }
@@ -463,7 +507,7 @@
     function openReceiptModal(id) {
         const t = trips.find(trip => trip.id === id); if (!t?.receipts) return;
         const box = document.getElementById('modal-images'); box.innerHTML = '';
-        t.receipts.forEach(b => { const img = document.createElement('img'); img.src = b; img.className = 'w-full rounded-3xl border-4 border-white shadow-xl mb-8'; box.appendChild(img); });
+        t.receipts.forEach(b => { const img = document.createElement('img'); img.src = b; img.className = 'w-full rounded-3xl border-2 border-slate-700 shadow-xl mb-8'; box.appendChild(img); });
         document.getElementById('receipt-modal').classList.remove('hidden');
         setTimeout(() => document.getElementById('receipt-modal').classList.remove('opacity-0'), 10);
     }
