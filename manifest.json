@@ -1,22 +1,23 @@
 {
-  "name": "Volunteer Travel Tracker",
+  "name": "My Travel Log",
   "short_name": "TravelLog",
-  "description": "A private, offline-first travel reimbursement tracker.",
+  "description": "A private, ledger-style PWA for tracking volunteer mileage.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#4f46e5",
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGY0NmU1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE5IDV2MTRIM1Y1aDE2eiIvPjxwYXRoIGQ9Ik0zIDloMTZtLTggNGg0bS00IDRoNCIvPjwvc3ZnPg==",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCA1MTIgNTEyIj48Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI1NiIgZmlsbD0iIzRmNDZlNSIvPjxwYXRoIGQ9Ik00MDggMzAzdjY4YTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtMzJIMTYwdjMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtNjhsMjctMTA3YTU2IDU2IDAgMCAxIDU0LTQ0aDE0MmE1NiA1NiAwIDAgMSA1NCA0NHptLTk2LTU1YTE2IDE2IDAgMSAwLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2em0tMTYwIDBhMTYgMTYgMCAxIDAgLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=",
       "sizes": "192x192",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGY0NmU1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE5IDV2MTRIM1Y1aDE2eiIvPjxwYXRoIGQ9Ik0zIDloMTZtLTggNGg0bS00IDRoNCIvPjwvc3ZnPg==",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCA1MTIgNTEyIj48Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI1NiIgZmlsbD0iIzRmNDZlNSIvPjxwYXRoIGQ9Ik00MDggMzAzdjY4YTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtMzJIMTYwdjMyYTE2IDE2IDAgMCAxLTE2IDE2aC0zMmExNiAxNiAwIDAgMS0xNi0xNnYtNjhsMjctMTA3YTU2IDU2IDAgMCAxIDU0LTQ0aDE0MmE1NiA1NiAwIDAgMSA1NCA0NHptLTk2LTU1YTE2IDE2IDAgMSAwLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2em0tMTYwIDBhMTYgMTYgMCAxIDAgLTE2IDE2IDE2IDE2IDAgMCAwIDE2LTE2eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }
