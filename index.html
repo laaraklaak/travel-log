@@ -137,7 +137,13 @@
                     <label for="input-round-trip" class="text-sm font-bold text-slate-700 cursor-pointer select-none">Add Return Trip (Different route)</label>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1 tracking-tight">Distance (Outbound Km)</label>
+                    <div class="flex justify-between items-end mb-1.5 pr-1">
+                        <label class="block text-sm font-bold text-slate-700 pl-1 tracking-tight">Distance to Destination (km)</label>
+                        <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2.5 py-1 rounded-lg border border-indigo-100 flex items-center gap-1 hover:bg-indigo-100 active:scale-95 transition-all shadow-sm">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Map Check
+                        </button>
+                    </div>
                     <input type="number" id="input-km" required min="0" max="1500" step="0.1" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all font-medium">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -151,9 +157,15 @@
                     </div>
                 </div>
                 <div id="return-trip-fields" class="hidden space-y-5 pt-5 border-t border-slate-100">
-                    <h4 class="text-xs font-black text-indigo-400 uppercase tracking-widest text-center">Return Journey</h4>
+                    <h4 class="text-xs font-black text-indigo-400 uppercase tracking-widest text-center">Return Journey Details</h4>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1.5 pl-1 tracking-tight">Distance (Return Km)</label>
+                        <div class="flex justify-between items-end mb-1.5 pr-1">
+                            <label class="block text-sm font-bold text-slate-700 pl-1 tracking-tight">Distance Back (km)</label>
+                            <button type="button" onclick="openGoogleMaps()" class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2.5 py-1 rounded-lg border border-indigo-100 flex items-center gap-1 hover:bg-indigo-100 active:scale-95 transition-all shadow-sm">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Map Check
+                            </button>
+                        </div>
                         <input type="number" id="input-return-km" min="0" max="1500" step="0.1" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl px-4 py-3.5 focus:ring-4 focus:ring-indigo-500/20 outline-none font-medium">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -413,6 +425,13 @@
     function clearLocalData() { if(confirm("Clear phone memory? Drive remains safe.")) { localStorage.clear(); location.reload(); } }
     function exportLocalJSON() { const d = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({trips})); const n = document.createElement('a'); n.setAttribute("href", d); n.setAttribute("download", "travel-log.json"); n.click(); }
     function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2200); }
+
+    function openGoogleMaps() {
+        const dest = document.getElementById('input-dest').value.trim();
+        if (!dest) { showToast("Type a destination first!"); return; }
+        // Automatically opens a directions page from the user's current location to the typed destination
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`, '_blank');
+    }
 
     async function handleFileSelect(e) {
         const files = e.target.files; if(files.length > 0) showToast("Processing photo(s)...");
